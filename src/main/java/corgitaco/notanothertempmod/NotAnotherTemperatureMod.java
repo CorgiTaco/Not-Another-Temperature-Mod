@@ -1,5 +1,11 @@
 package corgitaco.notanothertempmod;
 
+import corgitaco.notanothertempmod.capabilities.PlayerTemperatureCapability;
+import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureClient;
+import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureCommon;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -25,7 +31,9 @@ public class NotAnotherTemperatureMod {
 
     }
 
-    public void commonSetup(FMLCommonSetupEvent event) {}
+    public void commonSetup(FMLCommonSetupEvent event) {
+        PlayerTemperatureCapability.register();
+    }
 
     public void clientSetup(FMLClientSetupEvent event) {}
 
@@ -33,7 +41,11 @@ public class NotAnotherTemperatureMod {
     public static class NATMEvents {
 
         @SubscribeEvent
-        public static void playerTickEvent(TickEvent.PlayerTickEvent event) {}
+        public static void playerTickEvent(TickEvent.PlayerTickEvent event) {
+            PlayerEntity player = event.player;
+            World world = player.world;
+            TemperatureCommon.tickPlayerTemperature(player, world);
+        }
 
         @SubscribeEvent
         public static void worldTickEvent(TickEvent.WorldTickEvent event) {}
@@ -45,6 +57,8 @@ public class NotAnotherTemperatureMod {
 
     @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class NATMClientEvents {
+
+        Minecraft mc = Minecraft.getInstance();
 
         @SubscribeEvent
         public static void renderTickEvent(TickEvent.RenderTickEvent event) {}
@@ -62,6 +76,9 @@ public class NotAnotherTemperatureMod {
         public void renderGameOverlayEventPost(RenderGameOverlayEvent.Post event) {}
 
         @SubscribeEvent
-        public void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {}
+        public void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
+            if (!mc.gameSettings.showDebugInfo)
+               event.getLeft().add("Player Temperature" + TemperatureClient.returnPlayerTemperature());
+        }
     }
 }
