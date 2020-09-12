@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[33,)"
+license="GPLv3"
+issueTrackerURL="https://github.com/CorgiTaco/Not-Another-Temperature-Mod/issues"
+[[mods]]
+modId="notanothertempmod"
+version="1.0.0"
+displayName="Not Another Temperature Mod"
+displayURL="https://github.com/CorgiTaco/ShutupExperimentalSettings"
+logoFile="logo_text.png"
+credits="Corgi Taco"
+authors="Corgi Taco"
+description='''
+Adds temperature, sleepiness, hydration, and more to make Minecraft a pain in the a**.
+'''
+[[dependencies.notanothertempmod]]
+    modId="forge"
+    mandatory=true
+    versionRange="[33.0.0,)"
+    ordering="NONE"
+    side="BOTH"
