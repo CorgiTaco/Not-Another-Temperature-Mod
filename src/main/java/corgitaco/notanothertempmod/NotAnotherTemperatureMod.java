@@ -32,7 +32,10 @@ public class NotAnotherTemperatureMod {
     }
 
     public void commonSetup(FMLCommonSetupEvent event) {
+        LOGGER.debug("NATM: Common setup event starting...");
         PlayerTemperatureCapability.register();
+        LOGGER.info("NATM: Common setup event completed!");
+
     }
 
     public void clientSetup(FMLClientSetupEvent event) {}
@@ -58,7 +61,7 @@ public class NotAnotherTemperatureMod {
     @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class NATMClientEvents {
 
-        Minecraft mc = Minecraft.getInstance();
+        public static final Minecraft mc = Minecraft.getInstance();
 
         @SubscribeEvent
         public static void renderTickEvent(TickEvent.RenderTickEvent event) {}
