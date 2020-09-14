@@ -3,6 +3,8 @@ package corgitaco.notanothertempmod;
 import corgitaco.notanothertempmod.data.capabilities.IPlayerImpacts;
 import corgitaco.notanothertempmod.data.capabilities.PlayerImpactCapability;
 import corgitaco.notanothertempmod.data.network.NetworkHandler;
+import corgitaco.notanothertempmod.playerimpacts.hydration.HydrationClient;
+import corgitaco.notanothertempmod.playerimpacts.sleep.SleepClient;
 import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureClient;
 import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureCommon;
 import net.minecraft.client.Minecraft;
@@ -99,8 +101,8 @@ public class NotAnotherTemperatureMod {
         public static void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
             if (!mc.gameSettings.showDebugInfo) {
                 event.getLeft().add("Player Temperature: " + TemperatureClient.returnPlayerTemperature(mc));
-
-
+                event.getLeft().add("Player Hydration: " + HydrationClient.returnHydrationTemperature(mc));
+                event.getLeft().add("Player Sleepiness: " + SleepClient.returnPlayerSleepiness(mc));
             }
         }
     }

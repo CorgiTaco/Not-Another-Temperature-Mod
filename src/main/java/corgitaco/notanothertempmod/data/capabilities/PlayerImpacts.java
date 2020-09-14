@@ -4,8 +4,7 @@ import net.minecraft.nbt.CompoundNBT;
 
 public class PlayerImpacts implements IPlayerImpacts {
 
-
-    private double playerTemperature = 25;
+    private double playerTemperature = 73;
     private double biomeTemperature = 0.5;
 
     private double sleepiness = 0.5;
