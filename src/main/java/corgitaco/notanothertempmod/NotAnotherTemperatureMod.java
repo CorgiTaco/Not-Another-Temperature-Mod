@@ -97,8 +97,11 @@ public class NotAnotherTemperatureMod {
 
         @SubscribeEvent
         public static void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
-            if (!mc.gameSettings.showDebugInfo)
+            if (!mc.gameSettings.showDebugInfo) {
                 event.getLeft().add("Player Temperature: " + TemperatureClient.returnPlayerTemperature(mc));
+
+
+            }
         }
     }
 }
