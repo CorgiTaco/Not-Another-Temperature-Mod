@@ -7,7 +7,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class HydrationClient {
 
 
-
     public static void readBiomeTemperature() {
 
     }

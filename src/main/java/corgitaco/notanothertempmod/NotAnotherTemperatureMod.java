@@ -1,14 +1,18 @@
 package corgitaco.notanothertempmod;
 
-import corgitaco.notanothertempmod.capabilities.PlayerTemperatureCapability;
+import corgitaco.notanothertempmod.data.capabilities.IPlayerImpacts;
+import corgitaco.notanothertempmod.data.capabilities.PlayerImpactCapability;
+import corgitaco.notanothertempmod.data.network.NetworkHandler;
 import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureClient;
 import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureCommon;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,21 +26,23 @@ import org.apache.logging.log4j.Logger;
 @Mod("notanothertempmod")
 public class NotAnotherTemperatureMod {
     public static final Logger LOGGER = LogManager.getLogger();
-
     public static final String MOD_ID = "notanothertempmod";
+
+    @CapabilityInject(IPlayerImpacts.class)
+    public static Capability<IPlayerImpacts> PLAYER_IMPACTS = null;
 
     public NotAnotherTemperatureMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-
     }
 
     public void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.debug("NATM: Common setup event starting...");
-        PlayerTemperatureCapability.register();
+        PlayerImpactCapability.register();
+        NetworkHandler.init();
         LOGGER.info("NATM: Common setup event completed!");
-
     }
+
 
     public void clientSetup(FMLClientSetupEvent event) {}
 
@@ -45,16 +51,22 @@ public class NotAnotherTemperatureMod {
 
         @SubscribeEvent
         public static void playerTickEvent(TickEvent.PlayerTickEvent event) {
-            PlayerEntity player = event.player;
-            World world = player.world;
-            TemperatureCommon.tickPlayerTemperature(player, world);
+            if (event.side.isServer()) {
+                ServerPlayerEntity player = (ServerPlayerEntity) event.player;
+                World world = player.world;
+                if (event.phase == TickEvent.Phase.START) {
+                    TemperatureCommon.tickPlayerTemperature(player, world);
+                }
+            }
         }
 
         @SubscribeEvent
-        public static void worldTickEvent(TickEvent.WorldTickEvent event) {}
+        public static void worldTickEvent(TickEvent.WorldTickEvent event) {
+        }
 
         @SubscribeEvent
-        public static void entityTickEvent(LivingEvent.LivingUpdateEvent event) {}
+        public static void entityTickEvent(LivingEvent.LivingUpdateEvent event) {
+        }
     }
 
 
@@ -64,24 +76,29 @@ public class NotAnotherTemperatureMod {
         public static final Minecraft mc = Minecraft.getInstance();
 
         @SubscribeEvent
-        public static void renderTickEvent(TickEvent.RenderTickEvent event) {}
+        public static void renderTickEvent(TickEvent.RenderTickEvent event) {
+        }
 
         @SubscribeEvent
-        public static void clientTickEvent(TickEvent.ClientTickEvent event) {}
+        public static void clientTickEvent(TickEvent.ClientTickEvent event) {
+        }
 
         @SubscribeEvent
-        public static void renderFogEvent(EntityViewRenderEvent.FogDensity event) {}
+        public static void renderFogEvent(EntityViewRenderEvent.FogDensity event) {
+        }
 
         @SubscribeEvent
-        public void renderGameOverlayEventPre(RenderGameOverlayEvent.Pre event) {}
+        public void renderGameOverlayEventPre(RenderGameOverlayEvent.Pre event) {
+        }
 
         @SubscribeEvent
-        public void renderGameOverlayEventPost(RenderGameOverlayEvent.Post event) {}
+        public static void renderGameOverlayEventPost(RenderGameOverlayEvent.Post event) {
+        }
 
         @SubscribeEvent
-        public void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
+        public static void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
             if (!mc.gameSettings.showDebugInfo)
-               event.getLeft().add("Player Temperature" + TemperatureClient.returnPlayerTemperature());
+                event.getLeft().add("Player Temperature: " + TemperatureClient.returnPlayerTemperature(mc));
         }
     }
 }

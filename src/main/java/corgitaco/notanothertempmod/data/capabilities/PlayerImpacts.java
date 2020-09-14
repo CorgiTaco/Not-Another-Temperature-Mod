@@ -1,11 +1,11 @@
-package corgitaco.notanothertempmod.capabilities;
+package corgitaco.notanothertempmod.data.capabilities;
 
 import net.minecraft.nbt.CompoundNBT;
 
-public class PlayerTemperature implements ITemperature {
+public class PlayerImpacts implements IPlayerImpacts {
 
 
-    private double playerTemperature = 73;
+    private double playerTemperature = 25;
     private double biomeTemperature = 0.5;
 
     @Override
@@ -31,7 +31,7 @@ public class PlayerTemperature implements ITemperature {
     @Override
     public CompoundNBT saveNBTData() {
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putDouble("PlayerTemperature", getPlayerTemperature());
+        nbt.putDouble("PlayerImpacts", getPlayerTemperature());
         nbt.putDouble("BiomeTemperature", getBiomeTemperature());
 
         return nbt;
@@ -39,7 +39,7 @@ public class PlayerTemperature implements ITemperature {
 
     @Override
     public void loadNBTData(CompoundNBT nbtTag) {
-        this.setPlayerTemperature(nbtTag.getDouble("PlayerTemperature"));
+        this.setPlayerTemperature(nbtTag.getDouble("PlayerImpacts"));
         this.setBiomeTemperature(nbtTag.getDouble("BiomeTemperature"));
     }
 }
