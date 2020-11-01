@@ -1,6 +1,5 @@
 package corgitaco.notanothertempmod.data;
 
-import corgitaco.notanothertempmod.NotAnotherTemperatureMod;
 import net.minecraft.nbt.CompoundNBT;
 
 public class PlayerData {
@@ -46,22 +45,16 @@ public class PlayerData {
     }
 
     public void saveNBTData(CompoundNBT nbt) {
-        NotAnotherTemperatureMod.LOGGER.info("SAVING");
         nbt.putDouble("PlayerTemperature", getPlayerTemperature());
         nbt.putDouble("BiomeTemperature", getBiomeTemperature());
         nbt.putDouble("PlayerSleepiness", getPlayerSleepiness());
         nbt.putDouble("PlayerHydration", getPlayerHydration());
-        NotAnotherTemperatureMod.LOGGER.info("SAVED");
-
     }
 
-    public void loadNBTData(CompoundNBT nbtTag) {
-        NotAnotherTemperatureMod.LOGGER.info("LOADING");
-        this.setPlayerTemperature(nbtTag.getDouble("PlayerTemperature"));
-        this.setBiomeTemperature(nbtTag.getDouble("BiomeTemperature"));
-        this.setPlayerSleepiness(nbtTag.getDouble("PlayerSleepiness"));
-        this.setPlayerHydration(nbtTag.getDouble("PlayerHydration"));
-        NotAnotherTemperatureMod.LOGGER.info("LOADED");
-
+    public void loadNBTData(CompoundNBT nbt) {
+        this.setPlayerTemperature(nbt.getDouble("PlayerTemperature"));
+        this.setBiomeTemperature(nbt.getDouble("BiomeTemperature"));
+        this.setPlayerSleepiness(nbt.getDouble("PlayerSleepiness"));
+        this.setPlayerHydration(nbt.getDouble("PlayerHydration"));
     }
 }
