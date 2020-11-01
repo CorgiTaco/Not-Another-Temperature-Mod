@@ -1,8 +1,9 @@
-package corgitaco.notanothertempmod.data.capabilities;
+package corgitaco.notanothertempmod.data;
 
+import corgitaco.notanothertempmod.NotAnotherTemperatureMod;
 import net.minecraft.nbt.CompoundNBT;
 
-public class PlayerImpacts implements IPlayerImpacts {
+public class PlayerData {
 
     private double playerTemperature = 73;
     private double biomeTemperature = 0.5;
@@ -12,61 +13,55 @@ public class PlayerImpacts implements IPlayerImpacts {
     private double hydration = 0.5;
 
 
-    @Override
     public void setBiomeTemperature(double biomeTemperature) {
         this.biomeTemperature = biomeTemperature;
     }
 
-    @Override
     public double getBiomeTemperature() {
         return biomeTemperature;
     }
 
-    @Override
     public void setPlayerTemperature(double playerTemperature) {
         this.playerTemperature = playerTemperature;
     }
 
-    @Override
     public double getPlayerTemperature() {
         return playerTemperature;
     }
 
-    @Override
     public void setPlayerSleepiness(double playerSleepiness) {
         this.sleepiness = playerSleepiness;
     }
 
-    @Override
     public double getPlayerSleepiness() {
         return sleepiness;
     }
 
-    @Override
     public void setPlayerHydration(double playerHydration) {
         this.hydration = playerHydration;
     }
 
-    @Override
     public double getPlayerHydration() {
         return hydration;
     }
 
-    @Override
-    public CompoundNBT saveNBTData() {
-        CompoundNBT nbt = new CompoundNBT();
+    public void saveNBTData(CompoundNBT nbt) {
+        NotAnotherTemperatureMod.LOGGER.info("SAVING");
         nbt.putDouble("PlayerTemperature", getPlayerTemperature());
         nbt.putDouble("BiomeTemperature", getBiomeTemperature());
         nbt.putDouble("PlayerSleepiness", getPlayerSleepiness());
         nbt.putDouble("PlayerHydration", getPlayerHydration());
-        return nbt;
+        NotAnotherTemperatureMod.LOGGER.info("SAVED");
+
     }
 
-    @Override
     public void loadNBTData(CompoundNBT nbtTag) {
-        this.setPlayerTemperature(nbtTag.getDouble("PlayerImpacts"));
+        NotAnotherTemperatureMod.LOGGER.info("LOADING");
+        this.setPlayerTemperature(nbtTag.getDouble("PlayerTemperature"));
         this.setBiomeTemperature(nbtTag.getDouble("BiomeTemperature"));
         this.setPlayerSleepiness(nbtTag.getDouble("PlayerSleepiness"));
         this.setPlayerHydration(nbtTag.getDouble("PlayerHydration"));
+        NotAnotherTemperatureMod.LOGGER.info("LOADED");
+
     }
 }

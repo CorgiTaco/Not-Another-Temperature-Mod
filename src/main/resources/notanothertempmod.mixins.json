@@ -3,7 +3,9 @@
   "package": "corgitaco.notanothertempmod.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "notanothertempmod.refmap.json",
-  "mixins": [],
+  "mixins": [
+    "LivingEntityMixin"
+  ],
   "client": [],
   "injectors": {
     "defaultRequire": 1

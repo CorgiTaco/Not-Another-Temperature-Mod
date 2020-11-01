@@ -1,41 +1,37 @@
-package corgitaco.notanothertempmod.playerimpacts.temperature;
+package corgitaco.notanothertempmod.playerimpacts;
 
 import corgitaco.notanothertempmod.NotAnotherTemperatureMod;
-import corgitaco.notanothertempmod.data.capabilities.PlayerImpacts;
-import corgitaco.notanothertempmod.data.network.NetworkHandler;
-import corgitaco.notanothertempmod.data.network.packet.PlayerTemperaturePacket;
+import corgitaco.notanothertempmod.data.PlayerData;
 import corgitaco.notanothertempmod.util.MathUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class TemperatureCommon {
+public class Temperature {
 
 
     public static void tickPlayerTemperature(PlayerEntity player, World world) {
-        PlayerImpacts PLAYER_DATA = (PlayerImpacts) player.getCapability(NotAnotherTemperatureMod.PLAYER_IMPACTS).orElseThrow(RuntimeException::new);
-        calculatePlayerTemperature(player, world, PLAYER_DATA);
-        NetworkHandler.sendTo((ServerPlayerEntity) player, new PlayerTemperaturePacket(PLAYER_DATA.getPlayerTemperature()));
+        calculatePlayerTemperature(player, world, NotAnotherTemperatureMod.playerImpacts);
     }
 
-    public static void calculatePlayerTemperature(PlayerEntity player, World world, PlayerImpacts playerImpacts) {
+    public static void calculatePlayerTemperature(PlayerEntity player, World world, PlayerData playerImpacts) {
         double modifiedTemperature = playerImpacts.getPlayerTemperature();
         BlockPos.Mutable playerPosition = new BlockPos.Mutable().setPos(player.getPosition());
         Biome biome = world.getBiome(playerPosition);
 
-//        if (player.isInWater()) {
-//            modifiedTemperature -= 0.5;
-//        }
+        if (world.getWorldInfo().getGameTime() % 10 == 0)
+            modifiedTemperature = modifiedTemperature - 10;
 
-        modifiedTemperature = calculatedWorldTemperature(player, world, playerImpacts);
 
         playerImpacts.setPlayerTemperature(modifiedTemperature);
 
     }
 
-    public static double calculatedWorldTemperature(PlayerEntity player, World world, PlayerImpacts playerImpacts) {
+    public static double calculatedWorldTemperature(PlayerEntity player, World world, PlayerData playerImpacts) {
         double worldTemperatureFahrenheit;
         BlockPos.Mutable playerPosition = new BlockPos.Mutable().setPos(player.getPosition());
         Biome biome = world.getBiome(playerPosition);
@@ -46,5 +42,10 @@ public class TemperatureCommon {
 
 
         return MathUtil.roundToHundredthPlace(MathUtil.isUsingCelsius(worldTemperatureFahrenheit, false));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static double returnPlayerTemperature(Minecraft minecraft) {
+        return NotAnotherTemperatureMod.playerImpacts.getPlayerTemperature();
     }
 }

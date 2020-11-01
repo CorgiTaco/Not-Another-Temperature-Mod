@@ -1,20 +1,15 @@
 package corgitaco.notanothertempmod;
 
-import corgitaco.notanothertempmod.data.capabilities.IPlayerImpacts;
-import corgitaco.notanothertempmod.data.capabilities.PlayerImpactCapability;
-import corgitaco.notanothertempmod.data.network.NetworkHandler;
-import corgitaco.notanothertempmod.playerimpacts.hydration.HydrationClient;
-import corgitaco.notanothertempmod.playerimpacts.sleep.SleepClient;
-import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureClient;
-import corgitaco.notanothertempmod.playerimpacts.temperature.TemperatureCommon;
+import corgitaco.notanothertempmod.data.PlayerData;
+import corgitaco.notanothertempmod.playerimpacts.Hydration;
+import corgitaco.notanothertempmod.playerimpacts.Sleep;
+import corgitaco.notanothertempmod.playerimpacts.Temperature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,18 +25,20 @@ public class NotAnotherTemperatureMod {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "notanothertempmod";
 
-    @CapabilityInject(IPlayerImpacts.class)
-    public static Capability<IPlayerImpacts> PLAYER_IMPACTS = null;
+//    @CapabilityInject(IPlayerImpacts.class)
+//    public static Capability<IPlayerImpacts> PLAYER_IMPACTS = null;
 
     public NotAnotherTemperatureMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
     }
 
+    public static final PlayerData playerImpacts = new PlayerData();
+
     public void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.debug("NATM: Common setup event starting...");
-        PlayerImpactCapability.register();
-        NetworkHandler.init();
+//        PlayerImpactCapability.register();
+//        NetworkHandler.init();
         LOGGER.info("NATM: Common setup event completed!");
     }
 
@@ -57,7 +54,7 @@ public class NotAnotherTemperatureMod {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.player;
                 World world = player.world;
                 if (event.phase == TickEvent.Phase.START) {
-                    TemperatureCommon.tickPlayerTemperature(player, world);
+                    Temperature.tickPlayerTemperature(player, world);
                 }
             }
         }
@@ -101,8 +98,8 @@ public class NotAnotherTemperatureMod {
         public static void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
             if (!mc.gameSettings.showDebugInfo) {
                 event.getLeft().add("Player Temperature: " + TemperatureClient.returnPlayerTemperature(mc));
-                event.getLeft().add("Player Hydration: " + HydrationClient.returnHydrationTemperature(mc));
-                event.getLeft().add("Player Sleepiness: " + SleepClient.returnPlayerSleepiness(mc));
+                event.getLeft().add("Player Hydration: " + Hydration.getHydration(mc));
+                event.getLeft().add("Player Sleepiness: " + Sleep.getPlayerSleepiness(mc));
             }
         }
     }
