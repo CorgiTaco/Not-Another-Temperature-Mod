@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class LivingEntityMixin  {
+public abstract class PlayerEntityMixin {
     @Inject(method = "writeAdditional", at = @At("HEAD"))
     private void writeTemp(CompoundNBT compound, CallbackInfo ci) {
         NotAnotherTemperatureMod.playerImpacts.saveNBTData(compound);

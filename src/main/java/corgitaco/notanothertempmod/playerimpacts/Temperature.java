@@ -23,11 +23,8 @@ public class Temperature {
         BlockPos.Mutable playerPosition = new BlockPos.Mutable().setPos(player.getPosition());
         Biome biome = world.getBiome(playerPosition);
 
-        if (world.getWorldInfo().getGameTime() % 10 == 0)
-            modifiedTemperature = modifiedTemperature - 10;
-
-
         playerImpacts.setPlayerTemperature(modifiedTemperature);
+        playerImpacts.setBiomeTemperature(calculatedWorldTemperature(player, world, playerImpacts));
 
     }
 
@@ -38,7 +35,7 @@ public class Temperature {
 
         //We do this to ensure temperature never goes negative from the world. < 0.1499999... is where water freezes or in our case, 0.9555999. 32 Degrees is where water freezes so we must find a way to calculate math to make 0.955599(or 0.96) = 32.
         double biomeTemperature = MathUtil.blendBiomeTemperatures(world, playerPosition);
-        worldTemperatureFahrenheit = (biomeTemperature * 4) * 10;
+        worldTemperatureFahrenheit = ((biomeTemperature * 4) * 10) * -2;
 
 
         return MathUtil.roundToHundredthPlace(MathUtil.isUsingCelsius(worldTemperatureFahrenheit, false));
@@ -47,5 +44,10 @@ public class Temperature {
     @OnlyIn(Dist.CLIENT)
     public static double returnPlayerTemperature(Minecraft minecraft) {
         return NotAnotherTemperatureMod.playerImpacts.getPlayerTemperature();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static double returnWorldTemperature(Minecraft minecraft) {
+        return NotAnotherTemperatureMod.playerImpacts.getBiomeTemperature();
     }
 }

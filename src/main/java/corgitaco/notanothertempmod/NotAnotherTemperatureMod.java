@@ -98,6 +98,7 @@ public class NotAnotherTemperatureMod {
         public static void renderGameOverlayEventText(RenderGameOverlayEvent.Text event) {
             if (!mc.gameSettings.showDebugInfo) {
                 event.getLeft().add("Player Temperature: " + Temperature.returnPlayerTemperature(mc));
+                event.getLeft().add("World Temperature: " + Temperature.returnWorldTemperature(mc));
                 event.getLeft().add("Player Hydration: " + Hydration.getHydration(mc));
                 event.getLeft().add("Player Sleepiness: " + Sleep.getPlayerSleepiness(mc));
             }
